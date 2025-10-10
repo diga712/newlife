@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>لوحة التحكم - New Life RP</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container dashboard">
+    <nav class="dash-nav">
+      <img src="assets/logo.png" class="dash-logo" alt="logo">
+      <h2>لوحة تحكم New Life RP</h2>
+      <ul class="tabs">
+        <li data-tab="register" class="active">إنشاء حساب</li>
+        <li data-tab="banlist">قائمة البان</li>
+        <li data-tab="toprich">قائمة الأغنياء</li>
+        <li data-tab="tools">أدوات السيرفر</li>
+        <li data-tab="complaints">نظام الشكاوي</li>
+      </ul>
+    </nav>
+
+    <section class="dash-content">
+      <div id="register" class="tab active">
+        <h3>إنشاء حساب جديد</h3>
+        <form id="registerForm">
+          <label>اسم المستخدم</label>
+          <input name="username" required />
+          <label>كلمة المرور</label>
+          <input name="password" type="password" required />
+          <button class="btn primary" type="submit">أنشئ الحساب</button>
+          <p class="hint">التسجيل الآن يقوم بإرسال البيانات إلى الواجهة (تعمل محليًا أو عبر API حسب الإعداد).</p>
+        </form>
+        <div id="registerMsg"></div>
+      </div>
+
+      <div id="banlist" class="tab">
+        <h3>قائمة البان</h3>
+        <table id="banTable">
+          <thead><tr><th>اللاعب</th><th>سبب</th><th>من</th><th>تاريخ</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="toprich" class="tab">
+        <h3>قائمة الأغنياء</h3>
+        <table id="richTable">
+          <thead><tr><th>المرتبة</th><th>اللاعب</th><th>المال</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="tools" class="tab">
+        <h3>أدوات السيرفر</h3>
+        <div class="tools-grid">
+          <button class="btn" id="restartServer">إعادة تشغيل السيرفر (Mock)</button>
+          <button class="btn" id="announce">إرسال إعلان</button>
+          <input id="announceText" placeholder="نص الإعلان..." />
+        </div>
+        <div id="toolsMsg"></div>
+      </div>
+
+      <div id="complaints" class="tab">
+        <h3>ارسال شكوى</h3>
+        <form id="complaintForm">
+          <label>اسم المشتكي</label>
+          <input name="from" required />
+          <label>اسم المشتكى منه</label>
+          <input name="against" />
+          <label>التفاصيل</label>
+          <textarea name="details" required></textarea>
+          <button class="btn primary" type="submit">ارسل الشكوى</button>
+        </form>
+        <div id="complaintMsg"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
