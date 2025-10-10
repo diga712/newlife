@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>إنشاء حساب - New Life RP</title><link rel="stylesheet" href="style.css"></head>
+<body class="login-page">
+<div class="login-container">
+  <img src="assets/logo.png" class="logo"><h2>إنشاء حساب</h2>
+  <form id="registerForm">
+    <input id="newUsername" placeholder="اسم المستخدم" required>
+    <input id="newPassword" type="password" placeholder="كلمة المرور" required>
+    <button type="submit" class="btn primary">تسجيل</button>
+  </form>
+  <p>عندك حساب؟ <a href="login.html">سجل الدخول</a></p>
+  <div id="msg"></div>
+</div>
+<script>
+document.getElementById('registerForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const u = document.getElementById('newUsername').value;
+  const p = document.getElementById('newPassword').value;
+  try{
+    const res = await fetch('api/register.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username:u,password:p})});
+    const j = await res.json();
+    document.getElementById('msg').innerText = j.message || '';
+    if(j.success) setTimeout(()=> location.href='login.html', 900);
+  }catch(err){ document.getElementById('msg').innerText = 'خطأ اتصال'; }
+});
+</script>
+</div>
+</body></html>

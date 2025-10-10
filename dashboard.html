@@ -1,81 +1,49 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>لوحة التحكم - New Life RP</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>لوحة التحكم - New Life RP</title><link rel="stylesheet" href="style.css"></head>
 <body>
-  <main class="container dashboard">
-    <nav class="dash-nav">
-      <img src="assets/logo.png" class="dash-logo" alt="logo">
-      <h2>لوحة تحكم New Life RP</h2>
-      <ul class="tabs">
-        <li data-tab="register" class="active">إنشاء حساب</li>
-        <li data-tab="banlist">قائمة البان</li>
-        <li data-tab="toprich">قائمة الأغنياء</li>
-        <li data-tab="tools">أدوات السيرفر</li>
-        <li data-tab="complaints">نظام الشكاوي</li>
-      </ul>
-    </nav>
+<main class="container dashboard">
+<nav class="dash-nav"><img src="assets/logo.png" class="dash-logo"><h2>لوحة تحكم New Life RP</h2><ul class="tabs"><li data-tab="register" class="active">الحساب</li><li data-tab="banlist">قائمة البان</li><li data-tab="toprich">قائمة الأغنياء</li><li data-tab="tools">أدوات السيرفر</li><li data-tab="complaints">الشكاوي</li></ul></nav>
+<section class="dash-content">
+  <div id="register" class="tab active"><h3>الحساب</h3><div id="accountInfo"></div><button id="logoutBtn" class="btn">تسجيل خروج</button></div>
+  <div id="banlist" class="tab"><h3>قائمة البان</h3><table id="banTable"><thead><tr><th>اللاعب</th><th>سبب</th><th>من</th><th>تاريخ</th></tr></thead><tbody></tbody></table></div>
+  <div id="toprich" class="tab"><h3>قائمة الأغنياء</h3><table id="richTable"><thead><tr><th>المرتبة</th><th>اللاعب</th><th>المال</th></tr></thead><tbody></tbody></table></div>
+  <div id="tools" class="tab"><h3>أدوات السيرفر</h3><div class="tools-grid"><button class="btn" id="restartServer">إعادة تشغيل السيرفر (Mock)</button><button class="btn" id="announce">إرسال إعلان</button><input id="announceText" placeholder="نص الإعلان..." /></div><div id="toolsMsg"></div></div>
+  <div id="complaints" class="tab"><h3>ارسال شكوى</h3><form id="complaintForm"><label>اسم المشتكي</label><input name="from" required><label>اسم المشتكى منه</label><input name="against"><label>التفاصيل</label><textarea name="details" required></textarea><button class="btn primary" type="submit">ارسل الشكوى</button></form><div id="complaintMsg"></div></div>
+</section>
+</main>
+<script>
+// check token
+const token = localStorage.getItem('nlrp_token');
+if(!token) location.href = 'login.html';
 
-    <section class="dash-content">
-      <div id="register" class="tab active">
-        <h3>إنشاء حساب جديد</h3>
-        <form id="registerForm">
-          <label>اسم المستخدم</label>
-          <input name="username" required />
-          <label>كلمة المرور</label>
-          <input name="password" type="password" required />
-          <button class="btn primary" type="submit">أنشئ الحساب</button>
-          <p class="hint">التسجيل الآن يقوم بإرسال البيانات إلى الواجهة (تعمل محليًا أو عبر API حسب الإعداد).</p>
-        </form>
-        <div id="registerMsg"></div>
-      </div>
+// tabs
+document.querySelectorAll('.tabs li').forEach(li=> li.addEventListener('click', ()=>{
+  document.querySelectorAll('.tabs li').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  li.classList.add('active'); document.getElementById(li.dataset.tab).classList.add('active');
+}));
 
-      <div id="banlist" class="tab">
-        <h3>قائمة البان</h3>
-        <table id="banTable">
-          <thead><tr><th>اللاعب</th><th>سبب</th><th>من</th><th>تاريخ</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
+// logout
+document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+  await fetch('api/logout.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({token})});
+  localStorage.removeItem('nlrp_token');
+  location.href='login.html';
+});
 
-      <div id="toprich" class="tab">
-        <h3>قائمة الأغنياء</h3>
-        <table id="richTable">
-          <thead><tr><th>المرتبة</th><th>اللاعب</th><th>المال</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
+// load banlist and toprich with token header
+async function loadBanList(){ try{
+  const res = await fetch('api/banlist.php', {headers:{'Authorization':'Bearer '+token}});
+  const j = await res.json(); populateBanTable(j.banlist || j);
+}catch(e){ console.error(e); }
+}
+function populateBanTable(items){ const tbody=document.querySelector('#banTable tbody'); tbody.innerHTML=''; items.forEach(i=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${i.player}</td><td>${i.reason}</td><td>${i.banned_by||i.by||''}</td><td>${i.date||i.banned_at||''}</td>`; tbody.appendChild(tr); });}
 
-      <div id="tools" class="tab">
-        <h3>أدوات السيرفر</h3>
-        <div class="tools-grid">
-          <button class="btn" id="restartServer">إعادة تشغيل السيرفر (Mock)</button>
-          <button class="btn" id="announce">إرسال إعلان</button>
-          <input id="announceText" placeholder="نص الإعلان..." />
-        </div>
-        <div id="toolsMsg"></div>
-      </div>
+async function loadTopRich(){ try{ const res = await fetch('api/toprich.php', {headers:{'Authorization':'Bearer '+token}}); const j = await res.json(); populateRichTable(j); }catch(e){ console.error(e); } }
+function populateRichTable(items){ const tbody=document.querySelector('#richTable tbody'); tbody.innerHTML=''; items.forEach((i,idx)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${idx+1}</td><td>${i.player}</td><td>${i.money}</td>`; tbody.appendChild(tr); }); }
 
-      <div id="complaints" class="tab">
-        <h3>ارسال شكوى</h3>
-        <form id="complaintForm">
-          <label>اسم المشتكي</label>
-          <input name="from" required />
-          <label>اسم المشتكى منه</label>
-          <input name="against" />
-          <label>التفاصيل</label>
-          <textarea name="details" required></textarea>
-          <button class="btn primary" type="submit">ارسل الشكوى</button>
-        </form>
-        <div id="complaintMsg"></div>
-      </div>
-    </section>
-  </main>
+document.getElementById('complaintForm').addEventListener('submit', async (e)=>{ e.preventDefault(); const fd=new FormData(e.target); const body={from:fd.get('from'),against:fd.get('against'),details:fd.get('details')}; await fetch('api/complaint.php',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(body)}); document.getElementById('complaintMsg').innerText='تم ارسال الشكوى'; });
 
-  <script src="script.js"></script>
-</body>
-</html>
+loadBanList(); loadTopRich();
+</script>
+</body></html>

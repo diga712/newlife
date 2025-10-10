@@ -1,30 +1,52 @@
-# New Life RP - Web Panel (Demo)
+# New Life RP - PHP Panel (MySQL)
+This package contains a PHP-backed panel for New Life RP with real login/register using MySQL.
+## Important files
+- api/config.php -> fill DB credentials
+- api/db.php -> PDO connection
+- api/register.php -> register endpoint (uses password_hash)
+- api/login.php -> login endpoint (returns token)
+- api/logout.php -> logout
+- api/banlist.php, api/toprich.php -> fetch data from DB
+- dashboard.html -> protected UI (uses token in Authorization header)
+- login.html / register.html -> frontend forms
 
-هذه النسخة هي لوحة تحكم بسيطة لواجهة سيرفر **New Life RP**.
-تعمل محليًا بدون قاعدة بيانات، وتأتي مع ملفات PHP بسيطة يمكن ربطها بقاعدة MySQL لاحقًا.
+## SQL schema (run on your MySQL server)
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) NOT NULL UNIQUE,
+  `password_hash` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-## المحتويات
-- `index.html` — الصفحة الرئيسية (Landing)
-- `dashboard.html` — لوحة التحكم (Register, BanList, TopRich, Tools, Complaints)
-- `style.css`, `script.js`
-- `data.json` — بيانات تجريبية لقائمة البان والأغنياء
-- `api/` — ملفات PHP (stubs) للتكامل مع خادم PHP + MySQL
-  - `config.php` — إعدادات DB
-  - `register.php`, `banlist.php`, `toprich.php`, `complaint.php`
+CREATE TABLE `sessions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `token` varchar(128) NOT NULL UNIQUE,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY(`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-## طريقة التشغيل (سريع)
-1. فك الملف واضعط على `index.html` لعرض الواجهة محليًا (Demo - بدون PHP).
-2. لتشغيل الـ API (PHP) ضع المجلد على خادم يدعم PHP (مثل Apache) أو استضافة تدعم PHP.
-   - تأكد من أن `api/config.php` يحتوي على بيانات الاتصال الصحيحة بقاعدة البيانات.
-3. بعد رفع الملفات على الاستضافة، ادخل إلى `dashboard.html` لاختبار الوظائف.
+-- Optional tables you may create to link with SA-MP data:
+CREATE TABLE `bans` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `player` varchar(64) NOT NULL,
+  `reason` varchar(255) DEFAULT NULL,
+  `banned_by` varchar(64) DEFAULT NULL,
+  `banned_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-## ربط مع قاعدة MySQL (SA-MP)
-- خادم SA-MP عادة يستخدم MySQL لتخزين بيانات اللاعبين. يمكنك إنشاء جدول للمستخدمين وكتابة سكربت بسيط في `api/register.php` لعمل INSERT باستخدام PDO.
-- المثال في `api/register.php` حاليا يقوم بتسجيل الطلبات في ملف `reg_log.txt` كنسخة تجريبية.
+CREATE TABLE `players` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) NOT NULL,
+  `money` bigint DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-## ملاحظات أمنية
-- لا تخزن كلمات المرور نصًا عاديًا في بيئة حقيقية — استخدم `password_hash()` في PHP و`password_verify()` للتحقق.
-- استخدم HTTPS عند نشر الموقع لتأمين الشبكة.
-
----
-إذا تحب، أقدر أعدّل `api/register.php` ليتصل فعليًا بقاعدة بياناتك — أعطني بيانات الاتصال (host, dbname, user, pass) وسأرسل نسخة جاهزة.
+## Deployment
+1. Upload all files to a PHP-capable host (Apache/Nginx + PHP7.4+).
+2. Edit api/config.php with DB credentials.
+3. Import the SQL schema into your database.
+4. Open register.html to create accounts, then login.html to login and access dashboard.html.
