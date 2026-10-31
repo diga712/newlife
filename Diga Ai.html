@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Diga Ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Tajawal:wght@400;500;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#09090d;--panel:#14141b;--line:#2c1b22;--text:#f4f2f3;--muted:#9b96a2;--violet:#a50f1c;--pink:#ff2a3d;--glow:255,42,61;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+body{margin:0;min-height:100vh;background:radial-gradient(60% 35% at 50% 0,rgba(165,15,28,.24),transparent 70%) no-repeat,radial-gradient(50% 30% at 0 100%,rgba(165,15,28,.22),transparent 70%) no-repeat,var(--bg);color:var(--text);font:400 16px/1.8 Tajawal,"Segoe UI",Tahoma,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.7;background:radial-gradient(circle at 12% 18%,#ff2a3d 0 1.5px,transparent 2.5px),radial-gradient(circle at 86% 26%,#ff2a3d 0 1.5px,transparent 2.5px),radial-gradient(circle at 70% 64%,#ff2a3d 0 1px,transparent 2px),radial-gradient(circle at 24% 72%,#ff2a3d 0 1px,transparent 2px),radial-gradient(circle at 92% 88%,#ff2a3d 0 1.5px,transparent 2.5px),radial-gradient(circle at 6% 46%,#ff2a3d 0 1px,transparent 2px)}
+.tile{display:flex;flex-direction:column;align-items:center;line-height:1.4;font-size:14px;padding:8px 14px;border-radius:14px;background:#1a1b25;border:1px solid #2a2c3a;color:var(--text);text-decoration:none}
+.vid{max-width:820px;margin:0 auto 20px;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:#000;border:1px solid rgba(var(--glow),.5);box-shadow:0 0 44px rgba(var(--glow),.22)}
+.vid video{display:block;width:100%;height:100%;object-fit:cover}
+.igcard{max-width:460px;padding:20px;border-radius:22px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:linear-gradient(135deg,rgba(255,255,255,.11),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(14px);box-shadow:0 0 40px rgba(var(--glow),.2)}
+.av{width:72px;height:72px;padding:3px;border-radius:50%;background:conic-gradient(from 200deg,#ff2a3d,#ff9a62,#ff2a3d);box-shadow:0 0 22px rgba(var(--glow),.5)}
+.av span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:#0a0a10;font:400 26px "Black Ops One",sans-serif}
+.igid{display:flex;flex-direction:column;line-height:1.5}.igid b{font-size:20px}
+.igact{grid-column:1/-1;display:flex;gap:10px}.igact .btn{flex:1;text-align:center;padding:10px 12px}
+section{padding:52px 0}
+h1{font:400 clamp(44px,11vw,92px)/1.05 "Black Ops One",Tajawal,sans-serif;letter-spacing:.02em;text-shadow:0 0 28px rgba(var(--glow),.55);margin:0 0 14px}
+h2{font-size:clamp(26px,5vw,38px);font-weight:800;margin:0 0 8px}
+p{margin:0}.muted{color:var(--muted)}
+.btn{display:inline-block;border:0;border-radius:14px;padding:11px 26px;font:800 16px Tajawal,sans-serif;color:#fff;background:#e11d2e;box-shadow:0 0 22px rgba(var(--glow),.4);cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;border:1px solid var(--pink);box-shadow:none}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+input,textarea{width:100%;background:#1a1b25;border:1px solid #2a2c3a;border-radius:14px;color:var(--text);padding:12px 14px;font:400 16px Tajawal,sans-serif}
+.err{color:#ff8fa3;min-height:1.6em;font-size:14px}
+/* login */
+#login{min-height:85vh;display:grid;place-items:center;padding:20px}
+.lbox{width:100%;max-width:400px;background:rgba(20,20,27,.85);border:1px solid rgba(var(--glow),.55);border-radius:20px;padding:30px 26px;box-shadow:0 0 40px rgba(var(--glow),.18);text-align:center}
+.mark{width:64px;height:64px;margin:0 auto 12px;border-radius:18px;display:grid;place-items:center;font:800 30px Tajawal;background:rgba(var(--glow),.12);border:1px solid rgba(var(--glow),.6);color:var(--pink);box-shadow:0 0 28px rgba(var(--glow),.3)}
+.lbox h1{font-size:44px;margin:0 0 4px}.lbox h1::after{content:"";display:block;width:90px;height:2px;margin:10px auto 0;background:linear-gradient(90deg,transparent,var(--pink),transparent)}.lbox form{display:grid;gap:12px;margin-top:20px;text-align:right}
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(9,9,13,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:16px;height:58px}
+.logo{font:400 20px "Black Ops One",sans-serif;white-space:nowrap;text-shadow:0 0 14px rgba(var(--glow),.5)}
+nav{display:flex;gap:18px;overflow-x:auto;flex:1;scrollbar-width:none}
+nav a{color:var(--muted);text-decoration:none;white-space:nowrap}nav a:hover{color:var(--text)}
+.out{background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:4px 14px;cursor:pointer;font:400 14px Tajawal,sans-serif;white-space:nowrap}
+/* hero */
+.hero{padding:70px 0 40px}
+.hero p{font-size:19px;max-width:520px;margin-bottom:24px}
+.hero .btn{margin-inline-end:10px;margin-bottom:10px}
+/* ideas */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}
+.panel h3{margin:0 0 8px;font-size:21px}.panel ul{margin:0;padding-inline-start:20px}
+.note{margin-top:14px;font-size:15px}
+/* rows */
+.rows{list-style:none;margin:20px 0 0;padding:0}
+.rows li{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.rows b{min-width:190px;color:var(--pink)}
+/* chat */
+.chat{margin-top:20px;background:var(--panel);border:1px solid rgba(var(--glow),.45);border-radius:20px;box-shadow:0 0 36px rgba(var(--glow),.14);overflow:hidden}
+#log{height:360px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:85%;padding:10px 14px;border-radius:14px;white-space:pre-wrap;unicode-bidi:plaintext;overflow-wrap:anywhere}
+.m.u{align-self:flex-start;background:linear-gradient(90deg,var(--violet),#d41f2e)}
+.m.b{align-self:flex-end;background:#1a1b25;border:1px solid #2a2c3a}
+.chat form{display:flex;gap:10px;padding:12px;border-top:1px solid var(--line)}
+/* store */
+.store{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:20px}
+.item{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.item h3{margin:0;font-size:20px}.item p{flex:1}
+/* tools */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{border:1px solid var(--line);border-radius:14px;padding:10px 16px;background:var(--panel)}
+.chip b{display:block}
+/* contact */
+.cbox{display:grid;gap:12px;max-width:520px;margin-top:20px}
+footer{padding:30px 0 40px;text-align:center;color:var(--muted);border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lbox">
+    <div class="mark"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M13 8l-3 5h4l-3 5"/></svg></div>
+    <h1>Diga Ai</h1>
+    <p class="muted">سجّل الدخول بالبريد الإلكتروني</p>
+    <form id="lf" novalidate>
+      <label for="em">البريد الإلكتروني</label>
+      <input id="em" type="email" dir="ltr" placeholder="name@example.com" autocomplete="email">
+      <div class="err" id="err" role="alert"></div>
+      <button class="btn" type="submit">تسجيل الدخول</button><a class="tile" href="https://www.instagram.com/ai.nexus.dz" target="_blank" rel="noopener"><span class="muted">Instagram</span><b dir="ltr">@ai.nexus.dz</b></a>
+    </form>
+  </div>
+</div>
+
+<div id="app" hidden>
+<header class="top"><div class="wrap">
+  <div class="logo">Diga Ai</div>
+  <nav>
+    <a href="#ideas">الأفكار</a><a href="#hosting">الاستضافة</a><a href="#chat">الشات</a><a href="#store">الأكواد</a><a href="#tools">أدوات الذكاء</a><a href="#insta">إنستغرام</a><a href="#contact">تواصل</a>
+  </nav>
+  <button class="out" id="out" type="button">خروج</button>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Diga Ai</h1>
+    <p>أفكار لبوتات تلغرام وديسكورد، استضافة تناسبها، أكواد جاهزة، وشات يشرح لك الكود سطراً بسطر.</p>
+    <a class="btn" href="#chat">اسأل الشات</a><a class="btn ghost" href="#store">تصفّح الأكواد</a></div><div class="vid"><video src="/_blob/1bb76b396b86b6bf34a0c10463f21474" autoplay muted loop playsinline preload="auto" aria-label="أدوات الذكاء الاصطناعي"></video>
+  </div>
+
+  <section id="ideas">
+    <h2>ماذا تبرمج اليوم؟</h2>
+    <p class="muted">اختر نوع البوت وابدأ بفكرة صغيرة تكتمل في أيام.</p>
+    <div class="two">
+      <div class="panel"><h3>بوتات تلغرام</h3><ul>
+        <li>ردود تلقائية لمتجرك وأسئلة عملائك</li><li>إشعارات واشتراكات للقنوات</li><li>حجز المواعيد وتذكيرات</li><li>تحويل الملفات وأدوات يومية</li></ul>
+        <p class="note muted">المكتبات الشائعة: python-telegram-bot وTelegraf.</p></div>
+      <div class="panel"><h3>بوتات ديسكورد</h3><ul>
+        <li>إدارة السيرفر وحمايته من الإزعاج</li><li>نظام تذاكر للدعم</li><li>رتب ومستويات للأعضاء</li><li>موسيقى وألعاب صغيرة</li></ul>
+        <p class="note muted">المكتبات الشائعة: discord.py وdiscord.js.</p></div>
+    </div>
+  </section>
+
+  <section id="hosting">
+    <h2>أشهر الاستضافات للبوتات</h2>
+    <p class="muted">البوت يحتاج استضافة تبقى تعمل دائماً. راجع الخطط والأسعار الحالية عند كل مزوّد قبل الاختيار.</p>
+    <ul class="rows">
+      <li><b>Railway</b><span>نشر البوت من GitHub بخطوات قليلة.</span></li>
+      <li><b>Render</b><span>مناسبة لخدمات الويب والبوتات التي تعمل باستمرار.</span></li>
+      <li><b>Fly.io</b><span>تحكم أكبر وتشغيل قريب من المستخدمين.</span></li>
+      <li><b>Hetzner / Contabo / DigitalOcean</b><span>خادم VPS كامل لتشغيل عدة بوتات بتحكم كامل.</span></li>
+      <li><b>Vercel / Netlify</b><span>ممتازة لمواقع الواجهات، وليست للبوتات التي تعمل دائماً.</span></li>
+    </ul>
+  </section>
+
+  <section id="chat">
+    <h2>شات شرح الأكواد</h2>
+    <p class="muted">الصق كوداً واطلب شرحه، أو اسأل كيف تبني بوتاً.</p>
+    <div class="chat">
+      <div id="log" aria-live="polite"></div>
+      <form id="cf"><input id="q" placeholder="اكتب سؤالك أو الصق الكود هنا" autocomplete="off"><button class="btn" type="submit">إرسال</button></form>
+    </div>
+  </section>
+
+  <section id="store">
+    <h2>أكواد للبيع</h2>
+    <p class="muted">اضغط «اطلب» وستنتقل إلى نموذج التواصل والرسالة جاهزة.</p>
+    <div class="store">
+      <div class="item"><h3>بوت تلغرام للردود التلقائية</h3><p class="muted">ردود جاهزة وقائمة أوامر تعدّلها بسهولة.</p><button class="btn" data-order="بوت تلغرام للردود التلقائية" type="button">اطلب</button></div>
+      <div class="item"><h3>بوت ديسكورد للإدارة والتذاكر</h3><p class="muted">أوامر إدارة ونظام تذاكر للدعم.</p><button class="btn" data-order="بوت ديسكورد للإدارة والتذاكر" type="button">اطلب</button></div>
+      <div class="item"><h3>قالب متجر على تلغرام</h3><p class="muted">عرض المنتجات وتسجيل الطلبات داخل المحادثة.</p><button class="btn" data-order="قالب متجر على تلغرام" type="button">اطلب</button></div>
+    </div>
+  </section>
+
+  <section id="tools">
+    <h2>أدوات الذكاء المناسبة لك</h2>
+    <div class="chips">
+      <div class="chip"><b>ChatGPT</b><span class="muted">كتابة الأكواد وشرحها</span></div>
+      <div class="chip"><b>Claude</b><span class="muted">قراءة مشاريع طويلة وتعديلها</span></div>
+      <div class="chip"><b>Gemini</b><span class="muted">بحث وتكامل مع خدمات Google</span></div>
+      <div class="chip"><b>Perplexity</b><span class="muted">بحث مع ذكر المصادر</span></div>
+      <div class="chip"><b>GitHub Copilot</b><span class="muted">إكمال الكود داخل المحرر</span></div>
+    </div>
+  </section>
+
+  <section id="insta">
+    <h2>صفحتنا على إنستغرام</h2>
+    <p class="muted" style="margin-bottom:16px">تابعنا لأفكار جديدة وأدوات وعروض.</p>
+    <div class="igcard">
+      <div class="av"><span>D</span></div>
+      <div class="igid"><b dir="ltr">ai.nexus.dz</b><span class="muted">Diga Ai على إنستغرام</span></div>
+      <div class="igact"><a class="btn" href="https://www.instagram.com/ai.nexus.dz" target="_blank" rel="noopener">متابعة</a><a class="btn ghost" href="https://ig.me/m/ai.nexus.dz" target="_blank" rel="noopener">مراسلة</a></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>تواصل معنا عبر واتساب</h2>
+    <p class="muted">اكتب رقمك ورسالتك، وسيفتح واتساب برسالة جاهزة للإرسال.</p>
+    <form class="cbox" id="wf" novalidate>
+      <input id="ph" type="tel" dir="ltr" placeholder="رقم هاتفك" autocomplete="tel" aria-label="رقم هاتفك">
+      <textarea id="msg" rows="4" placeholder="رسالتك" aria-label="رسالتك"></textarea>
+      <div class="err" id="werr" role="alert"></div>
+      <button class="btn" type="submit">إرسال الرسالة</button>
+    </form>
+  </section>
+</main>
+<footer>Diga Ai</footer>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const LS={get(){try{return localStorage.getItem('diga_email')}catch(e){return null}},set(v){try{v?localStorage.setItem('diga_email',v):localStorage.removeItem('diga_email')}catch(e){}}};
+let email=LS.get();
+function show(){$('#login').hidden=!!email;$('#app').hidden=!email;
+  const v=$('.vid video');if(!v)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.controls=true;v.pause()}else if(email){v.play().catch(()=>{})}}
+show();
+$('#lf').addEventListener('submit',e=>{e.preventDefault();const v=$('#em').value.trim();
+  if(!/^\S+@\S+\.\S+$/.test(v)){$('#err').textContent='اكتب بريداً إلكترونياً صحيحاً.';return}
+  $('#err').textContent='';email=v;LS.set(v);show();scrollTo(0,0)});
+$('#out').onclick=()=>{email=null;LS.set(null);show()};
+
+document.querySelectorAll('[data-order]').forEach(b=>b.onclick=()=>{
+  $('#msg').value='أريد طلب: '+b.dataset.order;$('#contact').scrollIntoView();$('#msg').focus()});
+$('#wf').addEventListener('submit',e=>{e.preventDefault();
+  const p=$('#ph').value.trim(),m=$('#msg').value.trim();
+  if(!p||!m){$('#werr').textContent='اكتب رقمك ورسالتك أولاً.';return}
+  $('#werr').textContent='';
+  window.open('https://wa.me/213556688825?text='+encodeURIComponent('رقم المستخدم: '+p+'\n'+m),'_blank','noopener')});
+
+const SYS='أنت مساعد برمجة داخل موقع Diga Ai. أجب بالعربية البسيطة، واشرح الأكواد خطوة بخطوة، واكتب الأكواد داخل كتل واضحة. تخصصك بوتات تلغرام وديسكورد والاستضافة والبرمجة عموماً. كن مختصراً.';
+let sample=null,hist=[],busy=false;
+function add(c,t){const d=document.createElement('div');d.className='m '+c;d.textContent=t;$('#log').appendChild(d);$('#log').scrollTop=1e9;return d}
+add('b','مرحباً! اسألني عن أي كود أو فكرة بوت وسأشرحها لك.');
+if(window.claude&&claude.use){claude.use('sample').then(s=>{sample=s}).catch(()=>{})}
+$('#cf').addEventListener('submit',async e=>{e.preventDefault();
+  const q=$('#q').value.trim();if(!q||busy)return;
+  if(!sample){add('b','الشات غير متاح في هذا العرض.');return}
+  $('#q').value='';add('u',q);hist.push({role:'user',content:q});busy=true;const el=add('b','…');
+  try{
+    const msgs=hist.map((m,i)=>i?m:{role:'user',content:SYS+'\n\n'+m.content});
+    const r=await sample(msgs,{cache:false,onText:({text})=>{el.textContent=text;$('#log').scrollTop=1e9}});
+    el.textContent=r.text;hist.push({role:'assistant',content:r.text});
+  }catch(err){
+    hist.pop();
+    el.textContent=err&&err.code==='not_granted'?'لم تتم الموافقة على استخدام الشات. أرسل سؤالك مرة أخرى ووافق عند الطلب.':err&&err.code==='rate_limited'?'الطلبات كثيرة الآن. انتظر قليلاً ثم أعد المحاولة.':'تعذّر الحصول على رد. حاول مرة أخرى.';
+  }
+  busy=false});
+</script>
+</body>
+</html>
